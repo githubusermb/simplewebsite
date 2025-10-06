@@ -1,0 +1,406 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="product-list-page">
+  <div class="page-header">
+    <h1>Products</h1>
+    <p *ngIf="selectedCategory">Category: {{ categories.find(c => c.categoryId === selectedCategory)?.name }}</p>
+    <p *ngIf="searchQuery">Search results for: "{{ searchQuery }}"</p>
+  </div>
+  
+  <div class="filters-section">
+    <div class="search-bar">
+      <div class="form-group">
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="Search products..." 
+          [value]="searchQuery"
+          #searchInput>
+        <button class="btn btn-primary" (click)="onSearch(searchInput.value)">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+    
+    <div class="filter-options">
+      <div class="category-filter">
+        <label for="category">Category:</label>
+        <select 
+          id="category" 
+          class="form-control" 
+          [value]="selectedCategory || ''" 
+          (change)="onCategoryChange($event.target.value || null)">
+          <option value="">All Categories</option>
+          <option *ngFor="let category of categories" [value]="category.categoryId">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="sort-filter">
+        <label for="sort">Sort By:</label>
+        <select 
+          id="sort" 
+          class="form-control" 
+          [value]="sortOption" 
+          (change)="onSortChange($event.target.value)">
+          <option value="name_asc">Name (A-Z)</option>
+          <option value="name_desc">Name (Z-A)</option>
+          <option value="price_asc">Price (Low to High)</option>
+          <option value="price_desc">Price (High to Low)</option>
+        </select>
+      </div>
+      
+      <button 
+        class="btn btn-outline clear-filters" 
+        *ngIf="selectedCategory || searchQuery" 
+        (click)="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+  </div>
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading products...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-container">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="loadProducts()">Try Again</button>
+  </div>
+  
+  <div *ngIf="!isLoading && !error" class="products-container">
+    <div *ngIf="filteredProducts.length === 0" class="no-products">
+      <i class="fas fa-search"></i>
+      <h3>No products found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+      <button class="btn btn-primary" (click)="clearFilters()">Clear Filters</button>
+    </div>
+    
+    <div *ngIf="filteredProducts.length > 0" class="products-grid">
+      <div *ngFor="let product of filteredProducts" class="product-item">
+        <app-product-card 
+          [product]="product"
+          (addedToCart)="onProductAddedToCart($event)">
+        </app-product-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

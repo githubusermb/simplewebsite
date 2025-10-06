@@ -1,0 +1,356 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section class="hero">
+  <div class="hero-content">
+    <h1>Welcome to ShopCart</h1>
+    <p>Your one-stop shop for all your shopping needs</p>
+    <div class="hero-buttons">
+      <a routerLink="/products" class="btn btn-primary">Shop Now</a>
+      <a routerLink="/categories" class="btn btn-outline">Browse Categories</a>
+    </div>
+  </div>
+</section>
+
+<section class="featured-products">
+  <div class="section-header">
+    <h2>Featured Products</h2>
+    <a routerLink="/products" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
+  </div>
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading products...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-container">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="loadFeaturedProducts()">Try Again</button>
+  </div>
+  
+  <div *ngIf="!isLoading && !error" class="products-grid">
+    <div *ngFor="let product of featuredProducts" class="product-item">
+      <app-product-card 
+        [product]="product"
+        (addedToCart)="onProductAddedToCart($event)">
+      </app-product-card>
+    </div>
+  </div>
+</section>
+
+<section class="categories">
+  <div class="section-header">
+    <h2>Shop by Category</h2>
+  </div>
+  
+  <div class="categories-grid">
+    <div *ngFor="let category of categories" class="category-item">
+      <a [routerLink]="['/products']" [queryParams]="{category: category.categoryId}">
+        <div class="category-card">
+          <h3>{{ category.name }}</h3>
+          <p>{{ category.description }}</p>
+          <span class="browse-link">Browse <i class="fas fa-arrow-right"></i></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-content">
+    <h2>Join Our Newsletter</h2>
+    <p>Subscribe to get updates on new products and special offers</p>
+    
+    <form class="newsletter-form">
+      <div class="form-group">
+        <input type="email" class="form-control" placeholder="Your email address">
+        <button type="submit" class="btn btn-primary">Subscribe</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

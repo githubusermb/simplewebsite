@@ -1,0 +1,781 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="checkout-page">
+  <div class="page-header">
+    <h1>Checkout</h1>
+  </div>
+  
+  <div class="checkout-steps">
+    <div class="step" [class.active]="currentStep === 1">
+      <div class="step-number">1</div>
+      <div class="step-label">Shipping</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" [class.active]="currentStep === 2">
+      <div class="step-number">2</div>
+      <div class="step-label">Payment</div>
+    </div>
+    <div class="step-connector"></div>
+    <div class="step" [class.active]="currentStep === 3">
+      <div class="step-number">3</div>
+      <div class="step-label">Confirmation</div>
+    </div>
+  </div>
+  
+  <div class="checkout-content">
+    <!-- Step 1: Shipping Information -->
+    <div *ngIf="currentStep === 1" class="checkout-step-content">
+      <h2>Shipping Information</h2>
+      
+      <form [formGroup]="shippingForm" (ngSubmit)="nextStep()">
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input 
+            type="text" 
+            id="fullName" 
+            formControlName="fullName" 
+            class="form-control" 
+            [class.is-invalid]="sf.fullName.invalid && sf.fullName.touched">
+          <div *ngIf="sf.fullName.invalid && sf.fullName.touched" class="invalid-feedback">
+            Full name is required
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="addressLine1">Address Line 1</label>
+          <input 
+            type="text" 
+            id="addressLine1" 
+            formControlName="addressLine1" 
+            class="form-control"
+            [class.is-invalid]="sf.addressLine1.invalid && sf.addressLine1.touched">
+          <div *ngIf="sf.addressLine1.invalid && sf.addressLine1.touched" class="invalid-feedback">
+            Address is required
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="addressLine2">Address Line 2 (Optional)</label>
+          <input 
+            type="text" 
+            id="addressLine2" 
+            formControlName="addressLine2" 
+            class="form-control">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="city">City</label>
+            <input 
+              type="text" 
+              id="city" 
+              formControlName="city" 
+              class="form-control"
+              [class.is-invalid]="sf.city.invalid && sf.city.touched">
+            <div *ngIf="sf.city.invalid && sf.city.touched" class="invalid-feedback">
+              City is required
+            </div>
+          </div>
+          
+          <div class="form-group col-md-6">
+            <label for="state">State/Province</label>
+            <input 
+              type="text" 
+              id="state" 
+              formControlName="state" 
+              class="form-control"
+              [class.is-invalid]="sf.state.invalid && sf.state.touched">
+            <div *ngIf="sf.state.invalid && sf.state.touched" class="invalid-feedback">
+              State is required
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="postalCode">Postal Code</label>
+            <input 
+              type="text" 
+              id="postalCode" 
+              formControlName="postalCode" 
+              class="form-control"
+              [class.is-invalid]="sf.postalCode.invalid && sf.postalCode.touched">
+            <div *ngIf="sf.postalCode.invalid && sf.postalCode.touched" class="invalid-feedback">
+              Postal code is required
+            </div>
+          </div>
+          
+          <div class="form-group col-md-6">
+            <label for="country">Country</label>
+            <input 
+              type="text" 
+              id="country" 
+              formControlName="country" 
+              class="form-control"
+              [class.is-invalid]="sf.country.invalid && sf.country.touched">
+            <div *ngIf="sf.country.invalid && sf.country.touched" class="invalid-feedback">
+              Country is required
+            </div>
+          </div>
+        </div>
+        
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="shippingForm.invalid">
+            Continue to Payment
+          </button>
+        </div>
+      </form>
+    </div>
+    
+    <!-- Step 2: Payment Information -->
+    <div *ngIf="currentStep === 2" class="checkout-step-content">
+      <h2>Payment Information</h2>
+      
+      <form [formGroup]="paymentForm" (ngSubmit)="placeOrder()">
+        <div class="form-group">
+          <label>Payment Method</label>
+          <div class="payment-methods">
+            <div 
+              *ngFor="let method of paymentMethods" 
+              class="payment-method" 
+              [class.selected]="paymentForm.value.paymentMethod === method.id"
+              (click)="paymentForm.patchValue({paymentMethod: method.id})">
+              <div class="payment-method-radio">
+                <input 
+                  type="radio" 
+                  [id]="method.id" 
+                  [value]="method.id" 
+                  formControlName="paymentMethod">
+                <label [for]="method.id">{{ method.name }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div *ngIf="paymentForm.value.paymentMethod === 'credit_card'" class="credit-card-form">
+          <div class="form-group">
+            <label for="cardNumber">Card Number</label>
+            <input 
+              type="text" 
+              id="cardNumber" 
+              formControlName="cardNumber" 
+              class="form-control" 
+              placeholder="1234 5678 9012 3456"
+              [class.is-invalid]="pf.cardNumber.invalid && pf.cardNumber.touched">
+            <div *ngIf="pf.cardNumber.invalid && pf.cardNumber.touched" class="invalid-feedback">
+              Please enter a valid 16-digit card number
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="cardName">Name on Card</label>
+            <input 
+              type="text" 
+              id="cardName" 
+              formControlName="cardName" 
+              class="form-control"
+              [class.is-invalid]="pf.cardName.invalid && pf.cardName.touched">
+            <div *ngIf="pf.cardName.invalid && pf.cardName.touched" class="invalid-feedback">
+              Name on card is required
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label for="expiryDate">Expiry Date</label>
+              <input 
+                type="text" 
+                id="expiryDate" 
+                formControlName="expiryDate" 
+                class="form-control" 
+                placeholder="MM/YY"
+                [class.is-invalid]="pf.expiryDate.invalid && pf.expiryDate.touched">
+              <div *ngIf="pf.expiryDate.invalid && pf.expiryDate.touched" class="invalid-feedback">
+                Please enter a valid expiry date (MM/YY)
+              </div>
+            </div>
+            
+            <div class="form-group col-md-6">
+              <label for="cvv">CVV</label>
+              <input 
+                type="text" 
+                id="cvv" 
+                formControlName="cvv" 
+                class="form-control" 
+                placeholder="123"
+                [class.is-invalid]="pf.cvv.invalid && pf.cvv.touched">
+              <div *ngIf="pf.cvv.invalid && pf.cvv.touched" class="invalid-feedback">
+                Please enter a valid CVV
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div *ngIf="paymentForm.value.paymentMethod === 'paypal'" class="paypal-info">
+          <p>You will be redirected to PayPal to complete your payment after reviewing your order.</p>
+        </div>
+        
+        <div *ngIf="error" class="alert alert-danger">
+          {{ error }}
+        </div>
+        
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" (click)="prevStep()">
+            Back to Shipping
+          </button>
+          <button 
+            type="submit" 
+            class="btn btn-primary" 
+            [disabled]="paymentForm.invalid || isSubmitting">
+            <span *ngIf="!isSubmitting">Place Order</span>
+            <span *ngIf="isSubmitting">Processing...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <!-- Order Summary -->
+  <div class="order-summary">
+    <h3>Order Summary</h3>
+    
+    <div *ngIf="cart$ | async as cart">
+      <div class="cart-items">
+        <div *ngFor="let item of cart.items" class="cart-item">
+          <div class="item-info">
+            <div class="item-name">{{ item.name }}</div>
+            <div class="item-quantity">Qty: {{ item.quantity }}</div>
+          </div>
+          <div class="item-price">${{ (item.price * item.quantity).toFixed(2) }}</div>
+        </div>
+      </div>
+      
+      <div class="summary-divider"></div>
+      
+      <div class="summary-row">
+        <span>Subtotal</span>
+        <span>${{ cart.totalPrice.toFixed(2) }}</span>
+      </div>
+      
+      <div class="summary-row">
+        <span>Shipping</span>
+        <span>Free</span>
+      </div>
+      
+      <div class="summary-row total">
+        <span>Total</span>
+        <span>${{ cart.totalPrice.toFixed(2) }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,435 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="order-confirmation-page">
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading order details...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-container">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="loadOrder(route.snapshot.params['id'])">Try Again</button>
+  </div>
+  
+  <div *ngIf="!isLoading && !error && order" class="confirmation-content">
+    <div class="confirmation-header">
+      <div class="success-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h1>Order Confirmed!</h1>
+      <p>Thank you for your purchase. Your order has been received and is being processed.</p>
+    </div>
+    
+    <div class="order-details">
+      <div class="order-info">
+        <div class="info-item">
+          <div class="info-label">Order Number</div>
+          <div class="info-value">{{ order.orderId }}</div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-label">Order Date</div>
+          <div class="info-value">{{ getOrderDate() }}</div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-label">Order Status</div>
+          <div class="info-value status">{{ order.status | titlecase }}</div>
+        </div>
+        
+        <div class="info-item">
+          <div class="info-label">Estimated Delivery</div>
+          <div class="info-value">{{ getEstimatedDelivery() }}</div>
+        </div>
+      </div>
+      
+      <div class="shipping-info">
+        <h3>Shipping Address</h3>
+        <p>{{ order.shippingAddress.fullName }}</p>
+        <p>{{ order.shippingAddress.addressLine1 }}</p>
+        <p *ngIf="order.shippingAddress.addressLine2">{{ order.shippingAddress.addressLine2 }}</p>
+        <p>{{ order.shippingAddress.city }}, {{ order.shippingAddress.state }} {{ order.shippingAddress.postalCode }}</p>
+        <p>{{ order.shippingAddress.country }}</p>
+      </div>
+      
+      <div class="payment-info">
+        <h3>Payment Method</h3>
+        <p>{{ order.paymentMethod === 'credit_card' ? 'Credit Card' : 'PayPal' }}</p>
+      </div>
+    </div>
+    
+    <div class="order-items">
+      <h3>Order Items</h3>
+      
+      <div class="items-table">
+        <div class="table-header">
+          <div class="header-item product">Product</div>
+          <div class="header-item price">Price</div>
+          <div class="header-item quantity">Quantity</div>
+          <div class="header-item total">Total</div>
+        </div>
+        
+        <div *ngFor="let item of order.items" class="table-row">
+          <div class="row-item product">{{ item.name }}</div>
+          <div class="row-item price">${{ item.price.toFixed(2) }}</div>
+          <div class="row-item quantity">{{ item.quantity }}</div>
+          <div class="row-item total">${{ (item.price * item.quantity).toFixed(2) }}</div>
+        </div>
+        
+        <div class="table-footer">
+          <div class="footer-label">Total</div>
+          <div class="footer-value">${{ order.totalAmount.toFixed(2) }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="confirmation-actions">
+      <button class="btn btn-primary" (click)="continueShopping()">Continue Shopping</button>
+      <button class="btn btn-outline" (click)="viewOrders()">View My Orders</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

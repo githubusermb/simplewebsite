@@ -1,0 +1,305 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cart-item" [class.updating]="isUpdating">
+  <div class="cart-item-image">
+    <a [routerLink]="['/products', item.productId]">
+      <img [src]="item.imageUrl" [alt]="item.name">
+    </a>
+  </div>
+  
+  <div class="cart-item-details">
+    <h3 class="cart-item-name">
+      <a [routerLink]="['/products', item.productId]">{{ item.name }}</a>
+    </h3>
+    
+    <div class="cart-item-price">${{ item.price.toFixed(2) }}</div>
+    
+    <div class="cart-item-actions">
+      <div class="quantity-control">
+        <button 
+          class="quantity-btn" 
+          [disabled]="isUpdating || item.quantity <= 1" 
+          (click)="decrementQuantity()">
+          <i class="fas fa-minus"></i>
+        </button>
+        
+        <span class="quantity">{{ item.quantity }}</span>
+        
+        <button 
+          class="quantity-btn" 
+          [disabled]="isUpdating" 
+          (click)="incrementQuantity()">
+          <i class="fas fa-plus"></i>
+        </button>
+      </div>
+      
+      <button 
+        class="remove-btn" 
+        [disabled]="isUpdating" 
+        (click)="removeItem()">
+        <i class="fas fa-trash"></i>
+        <span>Remove</span>
+      </button>
+    </div>
+  </div>
+  
+  <div class="cart-item-subtotal">
+    <div class="subtotal-label">Subtotal:</div>
+    <div class="subtotal-amount">${{ (item.price * item.quantity).toFixed(2) }}</div>
+  </div>
+  
+  <div class="updating-overlay" *ngIf="isUpdating">
+    <div class="spinner"></div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

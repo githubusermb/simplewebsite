@@ -1,0 +1,509 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="cart-page">
+  <div class="page-header">
+    <h1>Your Shopping Cart</h1>
+  </div>
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading your cart...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-container">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="loadCart()">Try Again</button>
+  </div>
+  
+  <ng-container *ngIf="!isLoading && !error">
+    <!-- Not authenticated message -->
+    <div *ngIf="!isAuthenticated" class="auth-message">
+      <i class="fas fa-user-lock"></i>
+      <h3>Please login to view your cart</h3>
+      <p>Login to your account to view your cart and complete your purchase.</p>
+      <div class="auth-buttons">
+        <a routerLink="/login" [queryParams]="{returnUrl: '/cart'}" class="btn btn-primary">Login</a>
+        <a routerLink="/register" [queryParams]="{returnUrl: '/cart'}" class="btn btn-outline">Register</a>
+      </div>
+    </div>
+    
+    <!-- Empty cart message -->
+    <div *ngIf="isAuthenticated && (cart$ | async)?.items?.length === 0" class="empty-cart">
+      <i class="fas fa-shopping-cart"></i>
+      <h3>Your cart is empty</h3>
+      <p>Looks like you haven't added any products to your cart yet.</p>
+      <button class="btn btn-primary" (click)="continueShopping()">Continue Shopping</button>
+    </div>
+    
+    <!-- Cart with items -->
+    <div *ngIf="isAuthenticated && (cart$ | async)?.items?.length > 0" class="cart-with-items">
+      <div class="cart-items">
+        <app-cart-item 
+          *ngFor="let item of (cart$ | async)?.items" 
+          [item]="item"
+          (quantityChanged)="onQuantityChanged($event)"
+          (itemRemoved)="onItemRemoved($event)">
+        </app-cart-item>
+      </div>
+      
+      <div class="cart-summary">
+        <h3>Order Summary</h3>
+        
+        <div class="summary-row">
+          <span>Items ({{ (cart$ | async)?.totalItems }})</span>
+          <span>${{ (cart$ | async)?.totalPrice.toFixed(2) }}</span>
+        </div>
+        
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>Free</span>
+        </div>
+        
+        <div class="summary-row total">
+          <span>Total</span>
+          <span>${{ (cart$ | async)?.totalPrice.toFixed(2) }}</span>
+        </div>
+        
+        <div class="cart-actions">
+          <button class="btn btn-primary btn-block" (click)="proceedToCheckout()">
+            Proceed to Checkout
+          </button>
+          
+          <button class="btn btn-outline btn-block" (click)="continueShopping()">
+            Continue Shopping
+          </button>
+          
+          <button class="btn btn-danger btn-block" (click)="clearCart()">
+            Clear Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

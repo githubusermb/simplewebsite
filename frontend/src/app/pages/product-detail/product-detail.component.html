@@ -1,0 +1,454 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="product-detail-page">
+  <div class="back-link">
+    <a href="javascript:void(0)" (click)="goBack()">
+      <i class="fas fa-arrow-left"></i> Back to Products
+    </a>
+  </div>
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading product details...</p>
+  </div>
+  
+  <div *ngIf="error" class="error-container">
+    <i class="fas fa-exclamation-circle"></i>
+    <p>{{ error }}</p>
+    <button class="btn btn-primary" (click)="loadProduct(route.snapshot.params['id'])">Try Again</button>
+  </div>
+  
+  <div *ngIf="!isLoading && !error && product" class="product-detail">
+    <div class="product-image">
+      <img [src]="product.imageUrl" [alt]="product.name">
+    </div>
+    
+    <div class="product-info">
+      <h1 class="product-name">{{ product.name }}</h1>
+      
+      <div class="product-price">${{ product.price.toFixed(2) }}</div>
+      
+      <div class="product-availability" [ngClass]="{'in-stock': product.inventory > 0, 'out-of-stock': product.inventory === 0}">
+        <i class="fas" [ngClass]="{'fa-check-circle': product.inventory > 0, 'fa-times-circle': product.inventory === 0}"></i>
+        <span *ngIf="product.inventory > 0">In Stock ({{ product.inventory }} available)</span>
+        <span *ngIf="product.inventory === 0">Out of Stock</span>
+      </div>
+      
+      <div class="product-description">
+        <h3>Description</h3>
+        <p>{{ product.description }}</p>
+      </div>
+      
+      <div class="product-actions" *ngIf="product.inventory > 0">
+        <div class="quantity-control">
+          <label for="quantity">Quantity:</label>
+          <div class="quantity-input">
+            <button 
+              class="quantity-btn" 
+              [disabled]="quantity <= 1" 
+              (click)="decrementQuantity()">
+              <i class="fas fa-minus"></i>
+            </button>
+            
+            <input 
+              type="number" 
+              id="quantity" 
+              class="form-control" 
+              [(ngModel)]="quantity" 
+              min="1" 
+              [max]="product.inventory">
+            
+            <button 
+              class="quantity-btn" 
+              [disabled]="quantity >= product.inventory" 
+              (click)="incrementQuantity()">
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        
+        <button 
+          class="btn btn-primary btn-add-to-cart" 
+          [disabled]="isAddingToCart || product.inventory === 0" 
+          (click)="addToCart()">
+          <i class="fas fa-shopping-cart mr-1"></i>
+          <span *ngIf="!isAddingToCart">Add to Cart</span>
+          <span *ngIf="isAddingToCart">Adding...</span>
+        </button>
+      </div>
+      
+      <div class="product-actions out-of-stock-message" *ngIf="product.inventory === 0">
+        <p>This product is currently out of stock. Please check back later.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

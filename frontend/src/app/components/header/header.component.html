@@ -1,0 +1,186 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="header">
+  <div class="container">
+    <div class="header-content">
+      <div class="logo">
+        <a routerLink="/">
+          <h1>ShopCart</h1>
+        </a>
+      </div>
+      
+      <nav class="nav-desktop">
+        <ul class="nav-links">
+          <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a></li>
+          <li><a routerLink="/products" routerLinkActive="active">Products</a></li>
+        </ul>
+      </nav>
+      
+      <div class="header-actions">
+        <div class="cart-icon">
+          <a routerLink="/cart">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" *ngIf="(cart$ | async)?.totalItems">{{ (cart$ | async)?.totalItems }}</span>
+          </a>
+        </div>
+        
+        <div class="user-menu" *ngIf="currentUser$ | async as user; else loginButton">
+          <button class="user-button" (click)="toggleMenu()">
+            <span>{{ user.firstName }}</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          
+          <div class="dropdown-menu" [class.show]="isMenuOpen">
+            <a routerLink="/profile">My Profile</a>
+            <a routerLink="/orders">My Orders</a>
+            <a href="javascript:void(0)" (click)="logout()">Logout</a>
+          </div>
+        </div>
+        
+        <ng-template #loginButton>
+          <div class="auth-buttons">
+            <a routerLink="/login" class="btn btn-outline">Login</a>
+            <a routerLink="/register" class="btn btn-primary">Register</a>
+          </div>
+        </ng-template>
+      </div>
+      
+      <button class="mobile-menu-toggle" (click)="toggleMenu()">
+        <i class="fas" [ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+      </button>
+    </div>
+    
+    <nav class="nav-mobile" [class.show]="isMenuOpen">
+      <ul class="nav-links">
+        <li><a routerLink="/" (click)="toggleMenu()">Home</a></li>
+        <li><a routerLink="/products" (click)="toggleMenu()">Products</a></li>
+        <li *ngIf="!(currentUser$ | async)"><a routerLink="/login" (click)="toggleMenu()">Login</a></li>
+        <li *ngIf="!(currentUser$ | async)"><a routerLink="/register" (click)="toggleMenu()">Register</a></li>
+        <li *ngIf="currentUser$ | async"><a routerLink="/profile" (click)="toggleMenu()">My Profile</a></li>
+        <li *ngIf="currentUser$ | async"><a routerLink="/orders" (click)="toggleMenu()">My Orders</a></li>
+        <li *ngIf="currentUser$ | async"><a href="javascript:void(0)" (click)="logout(); toggleMenu()">Logout</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,447 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Login</h1>
+      <p>Welcome back! Please login to your account.</p>
+    </div>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          formControlName="email" 
+          class="form-control" 
+          [class.is-invalid]="f.email.invalid && f.email.touched">
+        <div *ngIf="f.email.invalid && f.email.touched" class="invalid-feedback">
+          <div *ngIf="f.email.errors?.required">Email is required</div>
+          <div *ngIf="f.email.errors?.email">Please enter a valid email address</div>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          formControlName="password" 
+          class="form-control" 
+          [class.is-invalid]="f.password.invalid && f.password.touched">
+        <div *ngIf="f.password.invalid && f.password.touched" class="invalid-feedback">
+          <div *ngIf="f.password.errors?.required">Password is required</div>
+          <div *ngIf="f.password.errors?.minlength">Password must be at least 6 characters</div>
+        </div>
+      </div>
+      
+      <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="rememberMe">
+        <label class="form-check-label" for="rememberMe">Remember me</label>
+        <a routerLink="/forgot-password" class="forgot-password">Forgot password?</a>
+      </div>
+      
+      <button 
+        type="submit" 
+        class="btn btn-primary btn-block" 
+        [disabled]="loginForm.invalid || isSubmitting">
+        <span *ngIf="!isSubmitting">Login</span>
+        <span *ngIf="isSubmitting">Logging in...</span>
+      </button>
+    </form>
+    
+    <div class="auth-footer">
+      <p>Don't have an account? <a routerLink="/register" [queryParams]="{returnUrl: returnUrl}">Register</a></p>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

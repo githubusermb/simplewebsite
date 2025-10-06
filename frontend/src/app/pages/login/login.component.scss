@@ -1,0 +1,532 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 160px);
+  padding: 2rem 0;
+}
+
+.auth-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 450px;
+  overflow: hidden;
+}
+
+.auth-header {
+  background-color: #f8f9fa;
+  padding: 2rem;
+  text-align: center;
+  border-bottom: 1px solid #dee2e6;
+  
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 0;
+  }
+}
+
+form {
+  padding: 2rem;
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+      transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      
+      &:focus {
+        border-color: #80bdff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+      }
+      
+      &.is-invalid {
+        border-color: #dc3545;
+        
+        &:focus {
+          box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+      }
+    }
+    
+    .invalid-feedback {
+      display: block;
+      width: 100%;
+      margin-top: 0.25rem;
+      font-size: 80%;
+      color: #dc3545;
+    }
+  }
+  
+  .form-check {
+    display: flex;
+    align-items: center;
+    
+    .form-check-input {
+      margin-right: 0.5rem;
+    }
+    
+    .form-check-label {
+      margin-bottom: 0;
+    }
+    
+    .forgot-password {
+      margin-left: auto;
+      font-size: 0.9rem;
+    }
+  }
+  
+  .btn-block {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+  }
+}
+
+.auth-footer {
+  padding: 1.5rem 2rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-top: 1px solid #dee2e6;
+  
+  p {
+    margin-bottom: 0;
+    color: #666;
+    
+    a {
+      font-weight: 500;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

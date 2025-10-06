@@ -1,0 +1,482 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.product-list-page {
+  padding-bottom: 3rem;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+  
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: #666;
+    font-size: 1.1rem;
+  }
+}
+
+.filters-section {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar {
+  margin-bottom: 1.5rem;
+  
+  .form-group {
+    display: flex;
+    
+    .form-control {
+      flex: 1;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      height: 45px;
+    }
+    
+    .btn {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      width: 50px;
+    }
+  }
+}
+
+.filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  
+  .category-filter, .sort-filter {
+    flex: 1;
+    min-width: 200px;
+    
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    
+    .form-control {
+      width: 100%;
+    }
+  }
+  
+  .clear-filters {
+    height: 38px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.loading-container, .error-container {
+  text-align: center;
+  padding: 3rem 0;
+  
+  .spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(0, 123, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: #007bff;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto 1rem;
+  }
+  
+  p {
+    font-size: 1.1rem;
+    color: #666;
+  }
+  
+  .fas {
+    font-size: 3rem;
+    color: #dc3545;
+    margin-bottom: 1rem;
+  }
+  
+  .btn {
+    margin-top: 1rem;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.no-products {
+  text-align: center;
+  padding: 3rem 0;
+  
+  .fas {
+    font-size: 3rem;
+    color: #6c757d;
+    margin-bottom: 1rem;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .filter-options {
+    flex-direction: column;
+    align-items: stretch;
+    
+    .category-filter, .sort-filter {
+      width: 100%;
+    }
+    
+    .clear-filters {
+      width: 100%;
+    }
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
