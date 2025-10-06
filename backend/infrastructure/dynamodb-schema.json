@@ -1,0 +1,212 @@
+{
+  "Tables": [
+    {
+      "TableName": "Customers",
+      "KeySchema": [
+        {
+          "AttributeName": "customerId",
+          "KeyType": "HASH"
+        }
+      ],
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "customerId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "email",
+          "AttributeType": "S"
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "EmailIndex",
+          "KeySchema": [
+            {
+              "AttributeName": "email",
+              "KeyType": "HASH"
+            }
+          ],
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "BillingMode": "PAY_PER_REQUEST"
+    },
+    {
+      "TableName": "Products",
+      "KeySchema": [
+        {
+          "AttributeName": "productId",
+          "KeyType": "HASH"
+        }
+      ],
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "productId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "categoryId",
+          "AttributeType": "S"
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "CategoryIndex",
+          "KeySchema": [
+            {
+              "AttributeName": "categoryId",
+              "KeyType": "HASH"
+            }
+          ],
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "BillingMode": "PAY_PER_REQUEST"
+    },
+    {
+      "TableName": "Categories",
+      "KeySchema": [
+        {
+          "AttributeName": "categoryId",
+          "KeyType": "HASH"
+        }
+      ],
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "categoryId",
+          "AttributeType": "S"
+        }
+      ],
+      "BillingMode": "PAY_PER_REQUEST"
+    },
+    {
+      "TableName": "Carts",
+      "KeySchema": [
+        {
+          "AttributeName": "cartId",
+          "KeyType": "HASH"
+        }
+      ],
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "cartId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "customerId",
+          "AttributeType": "S"
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "CustomerIndex",
+          "KeySchema": [
+            {
+              "AttributeName": "customerId",
+              "KeyType": "HASH"
+            }
+          ],
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "BillingMode": "PAY_PER_REQUEST"
+    },
+    {
+      "TableName": "CartItems",
+      "KeySchema": [
+        {
+          "AttributeName": "cartId",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "productId",
+          "KeyType": "RANGE"
+        }
+      ],
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "cartId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "productId",
+          "AttributeType": "S"
+        }
+      ],
+      "BillingMode": "PAY_PER_REQUEST"
+    },
+    {
+      "TableName": "Orders",
+      "KeySchema": [
+        {
+          "AttributeName": "orderId",
+          "KeyType": "HASH"
+        }
+      ],
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "orderId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "customerId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "orderDate",
+          "AttributeType": "S"
+        }
+      ],
+      "GlobalSecondaryIndexes": [
+        {
+          "IndexName": "CustomerOrderIndex",
+          "KeySchema": [
+            {
+              "AttributeName": "customerId",
+              "KeyType": "HASH"
+            },
+            {
+              "AttributeName": "orderDate",
+              "KeyType": "RANGE"
+            }
+          ],
+          "Projection": {
+            "ProjectionType": "ALL"
+          }
+        }
+      ],
+      "BillingMode": "PAY_PER_REQUEST"
+    },
+    {
+      "TableName": "OrderItems",
+      "KeySchema": [
+        {
+          "AttributeName": "orderId",
+          "KeyType": "HASH"
+        },
+        {
+          "AttributeName": "productId",
+          "KeyType": "RANGE"
+        }
+      ],
+      "AttributeDefinitions": [
+        {
+          "AttributeName": "orderId",
+          "AttributeType": "S"
+        },
+        {
+          "AttributeName": "productId",
+          "AttributeType": "S"
+        }
+      ],
+      "BillingMode": "PAY_PER_REQUEST"
+    }
+  ]
+}
