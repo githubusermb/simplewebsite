@@ -55,7 +55,9 @@ This will create a JAR file in the `target` directory.
 
 ## Deploying the Application
 
-To deploy the application to AWS, run the following commands:
+### Using AWS SAM
+
+To deploy the application using AWS SAM, run the following commands:
 
 ```bash
 cd infrastructure
@@ -64,6 +66,23 @@ sam deploy --guided
 ```
 
 Follow the prompts to deploy the application.
+
+### Using Terraform
+
+Alternatively, you can deploy the application using Terraform:
+
+```bash
+# First, build the Java application
+mvn clean package
+
+# Then, deploy using Terraform
+cd terraform
+terraform init
+terraform plan -out=tfplan
+terraform apply tfplan
+```
+
+See the [Terraform README](terraform/README.md) for more details.
 
 ## API Endpoints
 
