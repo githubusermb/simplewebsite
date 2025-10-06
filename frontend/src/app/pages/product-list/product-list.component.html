@@ -1,166 +1,7 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <div class="product-list-page">
   <div class="page-header">
     <h1>Products</h1>
-    <p *ngIf="selectedCategory">Category: {{ categories.find(c => c.categoryId === selectedCategory)?.name }}</p>
+    <p *ngIf="selectedCategory">Category: {{ getCategoryName(selectedCategory) }}</p>
     <p *ngIf="searchQuery">Search results for: "{{ searchQuery }}"</p>
   </div>
   
@@ -172,21 +13,24 @@
           class="form-control" 
           placeholder="Search products..." 
           [value]="searchQuery"
-          #searchInput>
-        <button class="btn btn-primary" (click)="onSearch(searchInput.value)">
+          #searchInput
+          (keyup.enter)="onSearch(searchInput.value)">
+        <button 
+          class="search-button" 
+          (click)="onSearch(searchInput.value)">
           <i class="fas fa-search"></i>
         </button>
       </div>
     </div>
     
     <div class="filter-options">
-      <div class="category-filter">
-        <label for="category">Category:</label>
+      <div class="form-group">
+        <label for="category">Category</label>
         <select 
           id="category" 
           class="form-control" 
           [value]="selectedCategory || ''" 
-          (change)="onCategoryChange($event.target.value || null)">
+          (change)="onCategoryChange($event)">
           <option value="">All Categories</option>
           <option *ngFor="let category of categories" [value]="category.categoryId">
             {{ category.name }}
@@ -194,13 +38,13 @@
         </select>
       </div>
       
-      <div class="sort-filter">
-        <label for="sort">Sort By:</label>
+      <div class="form-group">
+        <label for="sort">Sort By</label>
         <select 
           id="sort" 
           class="form-control" 
-          [value]="sortOption" 
-          (change)="onSortChange($event.target.value)">
+          [value]="sortOption"
+          (change)="onSortChange($event)">
           <option value="name_asc">Name (A-Z)</option>
           <option value="name_desc">Name (Z-A)</option>
           <option value="price_asc">Price (Low to High)</option>
@@ -246,161 +90,3 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

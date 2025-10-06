@@ -199,7 +199,7 @@
   <div *ngIf="error" class="error-container">
     <i class="fas fa-exclamation-circle"></i>
     <p>{{ error }}</p>
-    <button class="btn btn-primary" (click)="loadProduct(route.snapshot.params['id'])">Try Again</button>
+    <button class="btn btn-primary" (click)="loadProduct(product?.productId || '')">Try Again</button>
   </div>
   
   <div *ngIf="!isLoading && !error && product" class="product-detail">

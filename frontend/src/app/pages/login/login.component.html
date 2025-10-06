@@ -211,10 +211,10 @@
           id="email" 
           formControlName="email" 
           class="form-control" 
-          [class.is-invalid]="f.email.invalid && f.email.touched">
-        <div *ngIf="f.email.invalid && f.email.touched" class="invalid-feedback">
-          <div *ngIf="f.email.errors?.required">Email is required</div>
-          <div *ngIf="f.email.errors?.email">Please enter a valid email address</div>
+          [class.is-invalid]="f['email'].invalid && f['email'].touched">
+        <div *ngIf="f['email'].invalid && f['email'].touched" class="invalid-feedback">
+          <div *ngIf="f['email'].errors?.['required']">Email is required</div>
+          <div *ngIf="f['email'].errors?.['email']">Please enter a valid email address</div>
         </div>
       </div>
       
@@ -225,10 +225,10 @@
           id="password" 
           formControlName="password" 
           class="form-control" 
-          [class.is-invalid]="f.password.invalid && f.password.touched">
-        <div *ngIf="f.password.invalid && f.password.touched" class="invalid-feedback">
-          <div *ngIf="f.password.errors?.required">Password is required</div>
-          <div *ngIf="f.password.errors?.minlength">Password must be at least 6 characters</div>
+          [class.is-invalid]="f['password'].invalid && f['password'].touched">
+        <div *ngIf="f['password'].invalid && f['password'].touched" class="invalid-feedback">
+          <div *ngIf="f['password'].errors?.['required']">Password is required</div>
+          <div *ngIf="f['password'].errors?.['minlength']">Password must be at least 6 characters</div>
         </div>
       </div>
       

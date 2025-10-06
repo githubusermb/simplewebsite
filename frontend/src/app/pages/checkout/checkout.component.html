@@ -288,8 +288,8 @@
             id="fullName" 
             formControlName="fullName" 
             class="form-control" 
-            [class.is-invalid]="sf.fullName.invalid && sf.fullName.touched">
-          <div *ngIf="sf.fullName.invalid && sf.fullName.touched" class="invalid-feedback">
+            [class.is-invalid]="sf['fullName'].invalid && sf['fullName'].touched">
+          <div *ngIf="sf['fullName'].invalid && sf['fullName'].touched" class="invalid-feedback">
             Full name is required
           </div>
         </div>
@@ -301,8 +301,8 @@
             id="addressLine1" 
             formControlName="addressLine1" 
             class="form-control"
-            [class.is-invalid]="sf.addressLine1.invalid && sf.addressLine1.touched">
-          <div *ngIf="sf.addressLine1.invalid && sf.addressLine1.touched" class="invalid-feedback">
+            [class.is-invalid]="sf['addressLine1'].invalid && sf['addressLine1'].touched">
+          <div *ngIf="sf['addressLine1'].invalid && sf['addressLine1'].touched" class="invalid-feedback">
             Address is required
           </div>
         </div>
@@ -324,8 +324,8 @@
               id="city" 
               formControlName="city" 
               class="form-control"
-              [class.is-invalid]="sf.city.invalid && sf.city.touched">
-            <div *ngIf="sf.city.invalid && sf.city.touched" class="invalid-feedback">
+              [class.is-invalid]="sf['city'].invalid && sf['city'].touched">
+            <div *ngIf="sf['city'].invalid && sf['city'].touched" class="invalid-feedback">
               City is required
             </div>
           </div>
@@ -337,8 +337,8 @@
               id="state" 
               formControlName="state" 
               class="form-control"
-              [class.is-invalid]="sf.state.invalid && sf.state.touched">
-            <div *ngIf="sf.state.invalid && sf.state.touched" class="invalid-feedback">
+              [class.is-invalid]="sf['state'].invalid && sf['state'].touched">
+            <div *ngIf="sf['state'].invalid && sf['state'].touched" class="invalid-feedback">
               State is required
             </div>
           </div>
@@ -352,8 +352,8 @@
               id="postalCode" 
               formControlName="postalCode" 
               class="form-control"
-              [class.is-invalid]="sf.postalCode.invalid && sf.postalCode.touched">
-            <div *ngIf="sf.postalCode.invalid && sf.postalCode.touched" class="invalid-feedback">
+              [class.is-invalid]="sf['postalCode'].invalid && sf['postalCode'].touched">
+            <div *ngIf="sf['postalCode'].invalid && sf['postalCode'].touched" class="invalid-feedback">
               Postal code is required
             </div>
           </div>
@@ -365,8 +365,8 @@
               id="country" 
               formControlName="country" 
               class="form-control"
-              [class.is-invalid]="sf.country.invalid && sf.country.touched">
-            <div *ngIf="sf.country.invalid && sf.country.touched" class="invalid-feedback">
+              [class.is-invalid]="sf['country'].invalid && sf['country'].touched">
+            <div *ngIf="sf['country'].invalid && sf['country'].touched" class="invalid-feedback">
               Country is required
             </div>
           </div>
@@ -417,8 +417,8 @@
               formControlName="cardNumber" 
               class="form-control" 
               placeholder="1234 5678 9012 3456"
-              [class.is-invalid]="pf.cardNumber.invalid && pf.cardNumber.touched">
-            <div *ngIf="pf.cardNumber.invalid && pf.cardNumber.touched" class="invalid-feedback">
+              [class.is-invalid]="pf['cardNumber'].invalid && pf['cardNumber'].touched">
+            <div *ngIf="pf['cardNumber'].invalid && pf['cardNumber'].touched" class="invalid-feedback">
               Please enter a valid 16-digit card number
             </div>
           </div>
@@ -430,8 +430,8 @@
               id="cardName" 
               formControlName="cardName" 
               class="form-control"
-              [class.is-invalid]="pf.cardName.invalid && pf.cardName.touched">
-            <div *ngIf="pf.cardName.invalid && pf.cardName.touched" class="invalid-feedback">
+              [class.is-invalid]="pf['cardName'].invalid && pf['cardName'].touched">
+            <div *ngIf="pf['cardName'].invalid && pf['cardName'].touched" class="invalid-feedback">
               Name on card is required
             </div>
           </div>
@@ -445,8 +445,8 @@
                 formControlName="expiryDate" 
                 class="form-control" 
                 placeholder="MM/YY"
-                [class.is-invalid]="pf.expiryDate.invalid && pf.expiryDate.touched">
-              <div *ngIf="pf.expiryDate.invalid && pf.expiryDate.touched" class="invalid-feedback">
+                [class.is-invalid]="pf['expiryDate'].invalid && pf['expiryDate'].touched">
+              <div *ngIf="pf['expiryDate'].invalid && pf['expiryDate'].touched" class="invalid-feedback">
                 Please enter a valid expiry date (MM/YY)
               </div>
             </div>
@@ -459,8 +459,8 @@
                 formControlName="cvv" 
                 class="form-control" 
                 placeholder="123"
-                [class.is-invalid]="pf.cvv.invalid && pf.cvv.touched">
-              <div *ngIf="pf.cvv.invalid && pf.cvv.touched" class="invalid-feedback">
+                [class.is-invalid]="pf['cvv'].invalid && pf['cvv'].touched">
+              <div *ngIf="pf['cvv'].invalid && pf['cvv'].touched" class="invalid-feedback">
                 Please enter a valid CVV
               </div>
             </div>

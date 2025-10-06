@@ -285,11 +285,13 @@ export class ProductListComponent implements OnInit {
     this.filteredProducts = filtered;
   }
   
-  onCategoryChange(categoryId: string | null): void {
+  onCategoryChange(event: Event): void {
+    const categoryId = (event.target as HTMLSelectElement).value || null;
     this.updateQueryParams({ category: categoryId });
   }
   
-  onSortChange(sortOption: string): void {
+  onSortChange(event: Event): void {
+    const sortOption = (event.target as HTMLSelectElement).value;
     this.updateQueryParams({ sort: sortOption });
   }
   
@@ -305,6 +307,11 @@ export class ProductListComponent implements OnInit {
     });
   }
   
+  getCategoryName(categoryId: string): string {
+    const category = this.categories.find(c => c.categoryId === categoryId);
+    return category ? category.name : "";
+  }
+
   onProductAddedToCart(product: Product): void {
     // You could show a notification or update UI here
     console.log(`Product added to cart: ${product.name}`);
