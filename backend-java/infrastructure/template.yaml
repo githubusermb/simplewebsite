@@ -1,0 +1,832 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Shopping Cart Application with DynamoDB, Lambda, and API Gateway (Java version)
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues:
+      - dev
+      - prod
+    Description: Environment name
+
+Resources:
+  # DynamoDB Tables
+  CustomersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "Customers-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: customerId
+          AttributeType: S
+        - AttributeName: email
+          AttributeType: S
+      KeySchema:
+        - AttributeName: customerId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: EmailIndex
+          KeySchema:
+            - AttributeName: email
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  ProductsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "Products-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: productId
+          AttributeType: S
+        - AttributeName: categoryId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: productId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: CategoryIndex
+          KeySchema:
+            - AttributeName: categoryId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  CategoriesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "Categories-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: categoryId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: categoryId
+          KeyType: HASH
+
+  CartsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "Carts-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: cartId
+          AttributeType: S
+        - AttributeName: customerId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: cartId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: CustomerIndex
+          KeySchema:
+            - AttributeName: customerId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  CartItemsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "CartItems-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: cartId
+          AttributeType: S
+        - AttributeName: productId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: cartId
+          KeyType: HASH
+        - AttributeName: productId
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: CartIndex
+          KeySchema:
+            - AttributeName: cartId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  OrdersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "Orders-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: orderId
+          AttributeType: S
+        - AttributeName: customerId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: orderId
+          KeyType: HASH
+      GlobalSecondaryIndexes:
+        - IndexName: CustomerIndex
+          KeySchema:
+            - AttributeName: customerId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  OrderItemsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "OrderItems-${Environment}"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: orderId
+          AttributeType: S
+        - AttributeName: productId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: orderId
+          KeyType: HASH
+        - AttributeName: productId
+          KeyType: RANGE
+      GlobalSecondaryIndexes:
+        - IndexName: OrderIndex
+          KeySchema:
+            - AttributeName: orderId
+              KeyType: HASH
+          Projection:
+            ProjectionType: ALL
+
+  # Lambda Functions
+  # Customers Lambda Functions
+  GetCustomersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.customers.GetCustomerHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CUSTOMERS_TABLE: !Ref CustomersTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref CustomersTable
+      Events:
+        GetCustomers:
+          Type: Api
+          Properties:
+            Path: /customers
+            Method: get
+        GetCustomer:
+          Type: Api
+          Properties:
+            Path: /customers/{customerId}
+            Method: get
+
+  CreateCustomerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.customers.CreateCustomerHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CUSTOMERS_TABLE: !Ref CustomersTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CustomersTable
+      Events:
+        CreateCustomer:
+          Type: Api
+          Properties:
+            Path: /customers
+            Method: post
+
+  UpdateCustomerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.customers.UpdateCustomerHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CUSTOMERS_TABLE: !Ref CustomersTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CustomersTable
+      Events:
+        UpdateCustomer:
+          Type: Api
+          Properties:
+            Path: /customers/{customerId}
+            Method: put
+
+  DeleteCustomerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.customers.DeleteCustomerHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CUSTOMERS_TABLE: !Ref CustomersTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CustomersTable
+      Events:
+        DeleteCustomer:
+          Type: Api
+          Properties:
+            Path: /customers/{customerId}
+            Method: delete
+
+  LoginFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.customers.LoginHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CUSTOMERS_TABLE: !Ref CustomersTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref CustomersTable
+      Events:
+        Login:
+          Type: Api
+          Properties:
+            Path: /login
+            Method: post
+
+  # Products Lambda Functions
+  GetProductsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.products.GetProductHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          PRODUCTS_TABLE: !Ref ProductsTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref ProductsTable
+      Events:
+        GetProducts:
+          Type: Api
+          Properties:
+            Path: /products
+            Method: get
+        GetProduct:
+          Type: Api
+          Properties:
+            Path: /products/{productId}
+            Method: get
+        GetProductsByCategory:
+          Type: Api
+          Properties:
+            Path: /categories/{categoryId}/products
+            Method: get
+
+  CreateProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.products.CreateProductHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          PRODUCTS_TABLE: !Ref ProductsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProductsTable
+      Events:
+        CreateProduct:
+          Type: Api
+          Properties:
+            Path: /products
+            Method: post
+
+  UpdateProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.products.UpdateProductHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          PRODUCTS_TABLE: !Ref ProductsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProductsTable
+      Events:
+        UpdateProduct:
+          Type: Api
+          Properties:
+            Path: /products/{productId}
+            Method: put
+
+  DeleteProductFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.products.DeleteProductHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          PRODUCTS_TABLE: !Ref ProductsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProductsTable
+      Events:
+        DeleteProduct:
+          Type: Api
+          Properties:
+            Path: /products/{productId}
+            Method: delete
+
+  # Categories Lambda Functions
+  GetCategoriesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.categories.GetCategoryHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CATEGORIES_TABLE: !Ref CategoriesTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref CategoriesTable
+      Events:
+        GetCategories:
+          Type: Api
+          Properties:
+            Path: /categories
+            Method: get
+        GetCategory:
+          Type: Api
+          Properties:
+            Path: /categories/{categoryId}
+            Method: get
+
+  CreateCategoryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.categories.CreateCategoryHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CATEGORIES_TABLE: !Ref CategoriesTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CategoriesTable
+      Events:
+        CreateCategory:
+          Type: Api
+          Properties:
+            Path: /categories
+            Method: post
+
+  UpdateCategoryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.categories.UpdateCategoryHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CATEGORIES_TABLE: !Ref CategoriesTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CategoriesTable
+      Events:
+        UpdateCategory:
+          Type: Api
+          Properties:
+            Path: /categories/{categoryId}
+            Method: put
+
+  DeleteCategoryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.categories.DeleteCategoryHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CATEGORIES_TABLE: !Ref CategoriesTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CategoriesTable
+      Events:
+        DeleteCategory:
+          Type: Api
+          Properties:
+            Path: /categories/{categoryId}
+            Method: delete
+
+  # Cart Lambda Functions
+  GetCartFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.cart.GetCartHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CARTS_TABLE: !Ref CartsTable
+          CART_ITEMS_TABLE: !Ref CartItemsTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref CartsTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref CartItemsTable
+      Events:
+        GetCart:
+          Type: Api
+          Properties:
+            Path: /carts/{cartId}
+            Method: get
+
+  GetCartByCustomerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.cart.GetCartByCustomerHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CARTS_TABLE: !Ref CartsTable
+          CART_ITEMS_TABLE: !Ref CartItemsTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref CartsTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref CartItemsTable
+      Events:
+        GetCustomerCart:
+          Type: Api
+          Properties:
+            Path: /customers/{customerId}/cart
+            Method: get
+
+  CreateCartFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.cart.CreateCartHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CARTS_TABLE: !Ref CartsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartsTable
+      Events:
+        CreateCart:
+          Type: Api
+          Properties:
+            Path: /carts
+            Method: post
+
+  AddCartItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.cart.AddCartItemHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CARTS_TABLE: !Ref CartsTable
+          CART_ITEMS_TABLE: !Ref CartItemsTable
+          PRODUCTS_TABLE: !Ref ProductsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartItemsTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref ProductsTable
+      Events:
+        AddCartItem:
+          Type: Api
+          Properties:
+            Path: /carts/{cartId}/items
+            Method: post
+
+  UpdateCartItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.cart.UpdateCartItemHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CARTS_TABLE: !Ref CartsTable
+          CART_ITEMS_TABLE: !Ref CartItemsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartItemsTable
+      Events:
+        UpdateCartItem:
+          Type: Api
+          Properties:
+            Path: /carts/{cartId}/items/{productId}
+            Method: put
+
+  DeleteCartItemFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.cart.DeleteCartItemHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CARTS_TABLE: !Ref CartsTable
+          CART_ITEMS_TABLE: !Ref CartItemsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartItemsTable
+      Events:
+        DeleteCartItem:
+          Type: Api
+          Properties:
+            Path: /carts/{cartId}/items/{productId}
+            Method: delete
+
+  ClearCartFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.cart.ClearCartHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          CARTS_TABLE: !Ref CartsTable
+          CART_ITEMS_TABLE: !Ref CartItemsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartItemsTable
+      Events:
+        ClearCart:
+          Type: Api
+          Properties:
+            Path: /carts/{cartId}/clear
+            Method: post
+
+  # Orders Lambda Functions
+  GetOrdersFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.orders.GetOrderHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          ORDERS_TABLE: !Ref OrdersTable
+          ORDER_ITEMS_TABLE: !Ref OrderItemsTable
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref OrdersTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref OrderItemsTable
+      Events:
+        GetOrders:
+          Type: Api
+          Properties:
+            Path: /orders
+            Method: get
+        GetOrder:
+          Type: Api
+          Properties:
+            Path: /orders/{orderId}
+            Method: get
+        GetCustomerOrders:
+          Type: Api
+          Properties:
+            Path: /customers/{customerId}/orders
+            Method: get
+
+  CreateOrderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.orders.CreateOrderHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          ORDERS_TABLE: !Ref OrdersTable
+          ORDER_ITEMS_TABLE: !Ref OrderItemsTable
+          CARTS_TABLE: !Ref CartsTable
+          CART_ITEMS_TABLE: !Ref CartItemsTable
+          PRODUCTS_TABLE: !Ref ProductsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref OrdersTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref OrderItemsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref CartItemsTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ProductsTable
+      Events:
+        CreateOrder:
+          Type: Api
+          Properties:
+            Path: /orders
+            Method: post
+
+  UpdateOrderStatusFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.orders.UpdateOrderStatusHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          ORDERS_TABLE: !Ref OrdersTable
+          ORDER_ITEMS_TABLE: !Ref OrderItemsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref OrdersTable
+        - DynamoDBReadPolicy:
+            TableName: !Ref OrderItemsTable
+      Events:
+        UpdateOrderStatus:
+          Type: Api
+          Properties:
+            Path: /orders/{orderId}/status
+            Method: put
+
+  DeleteOrderFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ../target/shopcart-1.0.0.jar
+      Handler: com.shopcart.handlers.orders.DeleteOrderHandler::handleRequest
+      Runtime: java21
+      Architectures:
+        - x86_64
+      MemorySize: 512
+      Timeout: 30
+      Environment:
+        Variables:
+          ORDERS_TABLE: !Ref OrdersTable
+          ORDER_ITEMS_TABLE: !Ref OrderItemsTable
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref OrdersTable
+        - DynamoDBCrudPolicy:
+            TableName: !Ref OrderItemsTable
+      Events:
+        DeleteOrder:
+          Type: Api
+          Properties:
+            Path: /orders/{orderId}
+            Method: delete
+
+  # API Gateway
+  ShoppingCartApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: !Ref Environment
+      Cors:
+        AllowMethods: "'GET,POST,PUT,DELETE,OPTIONS'"
+        AllowHeaders: "'Content-Type,Authorization'"
+        AllowOrigin: "'*'"
+      Auth:
+        DefaultAuthorizer: NONE
+
+Outputs:
+  ApiEndpoint:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${ShoppingCartApi}.execute-api.${AWS::Region}.amazonaws.com/${Environment}/"
+
+  CustomersTableName:
+    Description: "Customers DynamoDB table name"
+    Value: !Ref CustomersTable
+
+  ProductsTableName:
+    Description: "Products DynamoDB table name"
+    Value: !Ref ProductsTable
+
+  CategoriesTableName:
+    Description: "Categories DynamoDB table name"
+    Value: !Ref CategoriesTable
+
+  CartsTableName:
+    Description: "Carts DynamoDB table name"
+    Value: !Ref CartsTable
+
+  CartItemsTableName:
+    Description: "CartItems DynamoDB table name"
+    Value: !Ref CartItemsTable
+
+  OrdersTableName:
+    Description: "Orders DynamoDB table name"
+    Value: !Ref OrdersTable
+
+  OrderItemsTableName:
+    Description: "OrderItems DynamoDB table name"
+    Value: !Ref OrderItemsTable
